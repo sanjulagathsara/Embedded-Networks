@@ -6,8 +6,10 @@ void setup() {
 }
 
 void loop() {
-  delay(100);
-  PORTB &= (0<<5); // Turn the LED off
-  delay(100);
-  PORTB |= (1<<5); // Turn the LED on
+
+  PORTB = 0b00000000; // Turn the LED off
+  delay(1000);
+  PORTB = 0b00100000; // Turn the LED on
+  delay(1000);
+
 }
