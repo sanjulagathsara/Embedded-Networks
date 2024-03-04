@@ -12,6 +12,7 @@ void setup() {
   // Set compare match register for 1hz increments
   OCR1A = 15624/10; // = (16*10^6) / (1*1024) - 1 (must be <65536)
   
+  
   // turn on CTC mode
   TCCR1B |= (1 << WGM12);
   // Set CS12 and CS10 bits for 1024 prescaler
