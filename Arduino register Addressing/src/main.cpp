@@ -10,6 +10,7 @@ void setup() {
   TCCR1B = 0; // Same for TCCR1B
   TCNT1  = 0; // Initialize counter value to 0
 
+
   // Set compare match register for 1hz increments
   OCR1A = 15624/10; // = (16*10^6) / (1*1024) - 1 (must be <65536)
   
@@ -28,9 +29,9 @@ void setup() {
 }
 
 ISR(TIMER1_COMPA_vect){
-  PORTB ^= (1<<PORTB5); // Toggle the LED
+  PORTB ^= (1<<PORTB5); // Toggle the  LED
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
+  // No loop here
 }
