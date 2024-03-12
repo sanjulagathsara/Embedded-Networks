@@ -1,7 +1,7 @@
 #include <Arduino.h>
 
 void setup() {
-  // put your setup code here, to run once:
+  
   DDRB |= (1<<5); // Set PB5 as an output
   PORTB |= (1<<5); // Turn the LED on
 
