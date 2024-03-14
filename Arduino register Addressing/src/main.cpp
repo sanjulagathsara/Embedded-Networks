@@ -1,37 +1,66 @@
+
 #include <Arduino.h>
 
-void setup() {
-  
-  DDRB |= (1<<5); // Set PB5 as an output
-  PORTB |= (1<<5); // Turn the LED on
+volatile uint16_t milliseconds = 0;
+volatile uint8_t microseconds = 0;
 
-
-  TCCR1A = 0; // Set entire TCCR1A register to 0
-  TCCR1B = 0; // Same for TCCR1B
-  TCNT1  = 0; // Initialize counter value to 0
-
-
-  // Set compare match register for 1hz increments
-  OCR1A = 15624/10; // = (16*10^6) / (1*1024) - 1 (must be <65536)
-  
-
-  // turn on CTC mode
-  TCCR1B |= (1 << WGM12);
-  // Set CS12 and CS10 bits for 1024 prescaler
-  TCCR1B |= (1 << CS12) | (1 << CS10);
-  // enable timer compare interrupt
-  TIMSK1 |= (1 << OCIE1A);
-
-  // enable global interrupts
-  sei();
-
-
+void initTimer1() {
+    // Configure Timer1 for 1ms interrupts
+    TCCR1B |= (1 << WGM12);  // CTC mode
+    OCR1A = 249;  // Timer1 CTC match value for 1ms at 16MHz with prescaler 64
+    TIMSK1 |= (1 << OCIE1A);  // Enable Timer1 compare match A interrupt
+    TCCR1B |= (1 << CS11) | (1 << CS10);  // Start Timer1 with prescaler 64
 }
 
-ISR(TIMER1_COMPA_vect){
-  PORTB ^= (1<<PORTB5); // Toggle the  LED
+void delay_ms(uint16_t ms) {
+    uint16_t start_ms = milliseconds;
+    while (milliseconds - start_ms < ms);
+}
+
+void initTimer2() {
+    // Configure Timer2 for 1us interrupts
+    TCCR2A = 0;  // Clear Timer2 control registers
+    TCCR2B = 0;
+    TCNT2 = 0;  // Initialize Timer2 counter
+    OCR2A = 15;  // Timer2 CTC match value for 1us at 16MHz with prescaler 8
+    TCCR2A |= (1 << WGM21);  // CTC mode
+    TIMSK2 |= (1 << OCIE2A);  // Enable Timer2 compare match A interrupt
+    TCCR2B |= (1 << CS21);  // Start Timer2 with prescaler 8
+}
+
+void delay_us(int us) {
+    uint8_t start_us = microseconds;
+    while (microseconds - start_us < us);
+}
+
+ISR(TIMER1_COMPA_vect) {
+    milliseconds++;
+}
+
+ISR(TIMER2_COMPA_vect) {
+    microseconds++;
+}
+
+void setup() {
+    // Initialize Serial
+    Serial.begin(9600);
+
+    // Initialize Timers
+    initTimer1();
+    initTimer2();
 }
 
 void loop() {
-  // No loop here
+    static uint8_t counter = 0;
+    static uint16_t value = 0;
+
+    delay_ms(20); // Delay 20ms
+
+    value++;
+    counter++;
+
+    if (counter >= 5) { // Print every 100ms
+        Serial.println(value);
+        counter = 0;
+    }
 }
