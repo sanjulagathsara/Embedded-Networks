@@ -1,3 +1,7 @@
+// Gathsara J.A.S
+// Start a timer with 1ms resolution and another timer with 1us resolution
+// Print a value every 100ms
+
 
 #include <Arduino.h>
 
@@ -6,6 +10,7 @@ volatile uint8_t microseconds = 0;
 
 void initTimer1() {
     // Configure Timer1 for 1ms interrupts
+
     TCCR1B |= (1 << WGM12);  // CTC mode
     OCR1A = 249;  // Timer1 CTC match value for 1ms at 16MHz with prescaler 64
     TIMSK1 |= (1 << OCIE1A);  // Enable Timer1 compare match A interrupt
@@ -19,6 +24,7 @@ void delay_ms(uint16_t ms) {
 
 void initTimer2() {
     // Configure Timer2 for 1us interrupts
+
     TCCR2A = 0;  // Clear Timer2 control registers
     TCCR2B = 0;
     TCNT2 = 0;  // Initialize Timer2 counter
