@@ -115,7 +115,9 @@ void setup() {
   digitalWrite(BUZZER,LOW);
   delay(500);
 
-  WiFi.begin("ElectroCube Wifi2","electrocubesanjula88",6);
+  //WiFi.begin("ElectroCube Wifi2","electrocubesanjula88",6);
+  //WiFi.begin("Sanjula's iPhone","chocolate14",6);
+  WiFi.begin("Pixel_8025","88888888",6);
   while(WiFi.status() != WL_CONNECTED){
     delay(250);
     display.clearDisplay();

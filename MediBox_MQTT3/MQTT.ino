@@ -2,7 +2,7 @@ const char* ssid = "ElectroCube Wifi2";
 const char* password =  "electrocubesanjula88";
 const char* mqttServer = "192.168.1.118";
 const int mqttPort = 1883;
-const char* mqttUser = "ESP32Client-1001";
+const char* mqttUser = "ESP32Client-1002";
 const char* mqttPassword = "mmcisawesome";
 
 
@@ -14,24 +14,24 @@ void setup_mqtt(){
 void connectToBroker(){
   while(!mqttClient.connected()){
     Serial.println("Attempting MQTT Connection...");
-    display.clearDisplay();
-    print_line("Attempting MQTT Connection",0,20,2);
+   // display.clearDisplay();
+    //print_line("Attempting MQTT Connection",0,20,2);
     if(mqttClient.connect(mqttUser)){
       Serial.println("Connected");
-      print_line("Connected",0,50,2);
+     // print_line("Connected",0,50,2);
       digitalWrite(BUZZER,HIGH);
       delay(200);
       digitalWrite(BUZZER,LOW);
       mqttClient.subscribe("ESP32-BUZZER");
-      mqttClient.subscribe("ESP32-CLIENT1");
+      mqttClient.subscribe("ESP32-CLIENT2");
     }
     else{
       Serial.println("Failed");
-      print_line("Failed",0,50,2);
+     // print_line("Failed",0,50,2);
       Serial.println(mqttClient.state());
       char bufTemp[10];
       sprintf(bufTemp, "%d", mqttClient.state());
-      print_line(bufTemp,80,50,2);
+     // print_line(bufTemp,80,50,2);
       digitalWrite(BUZZER,HIGH);
       delay(1000);
       digitalWrite(BUZZER,LOW);
@@ -59,6 +59,7 @@ void receiveCallback(char* topic,byte* payload,unsigned int length){
     payloadCharAr[i] = (char)payload[i];
   }
 
+
   char tempArr[10] = {'p','l','a','y','b','u','z','z','e','r'};
   for(int i=0;i<length;i++){
     if(payloadCharAr[i] != tempArr[i]){
@@ -74,11 +75,12 @@ void receiveCallback(char* topic,byte* payload,unsigned int length){
             digitalWrite(BUZZER,LOW);
             delay(100);
   }
+   Serial.println("Buzzer player");
     }
   }
 
 
-    char tempArr2[13] = {'c','l','i','e','n','t','1','b','u','z','z','e','r'};
+    char tempArr2[13] = {'c','l','i','e','n','t','2','b','u','z','z','e','r'};
   for(int i=0;i<length;i++){
     if(payloadCharAr[i] != tempArr2[i]){
       break;
@@ -96,5 +98,6 @@ void receiveCallback(char* topic,byte* payload,unsigned int length){
    Serial.println("Buzzer player");
     }
   }
+  
 
 }
