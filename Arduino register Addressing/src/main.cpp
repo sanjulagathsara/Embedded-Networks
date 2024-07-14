@@ -8,6 +8,8 @@
 volatile uint16_t milliseconds = 0;
 volatile uint8_t microseconds = 0;
 
+double 
+
 void initTimer1() {
     // Configure Timer1 for 1ms interrupts
 
